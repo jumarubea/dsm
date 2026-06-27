@@ -1,0 +1,51 @@
+{
+  "common": {
+    "appName": "Meneja wa Duka Dijitali",
+    "loading": "Inapakia…",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "logout": "Toka",
+    "search": "Tafuta",
+    "retry": "Jaribu tena",
+    "comingSoon": "Inakuja hivi karibuni",
+    "error": "Kuna hitilafu imetokea"
+  },
+  "auth": {
+    "title": "Ingia",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "submit": "Ingia",
+    "signingIn": "Inaingia…",
+    "invalid": "Barua pepe au nenosiri si sahihi"
+  },
+  "nav": {
+    "dashboard": "Dashibodi",
+    "pos": "Mauzo (POS)",
+    "products": "Bidhaa",
+    "inventory": "Hisa",
+    "sales": "Mauzo",
+    "customers": "Wateja",
+    "reports": "Ripoti",
+    "users": "Watumiaji",
+    "tenants": "Maduka",
+    "plans": "Mipango",
+    "platform": "Mfumo"
+  },
+  "dashboard": {
+    "title": "Dashibodi",
+    "todaySales": "Mauzo ya leo",
+    "todayCount": "Miamala ya leo",
+    "stockValue": "Thamani ya hisa",
+    "monthlyProfit": "Faida ya mwezi"
+  },
+  "connection": {
+    "online": "Mtandaoni",
+    "offline": "Nje ya mtandao",
+    "syncing": "Inasawazisha ({{count}})"
+  },
+  "subscription": {
+    "expired": "Usajili wako umesimama. Tafadhali wasiliana na msimamizi.",
+    "pastDue": "Usajili wako umechelewa kulipwa.",
+    "trialExpiring": "Jaribio lako linaisha baada ya siku {{days}}."
+  }
+}

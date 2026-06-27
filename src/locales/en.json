@@ -1,0 +1,51 @@
+{
+  "common": {
+    "appName": "Digital Shop Manager",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "logout": "Log out",
+    "search": "Search",
+    "retry": "Retry",
+    "comingSoon": "Coming soon",
+    "error": "Something went wrong"
+  },
+  "auth": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "signingIn": "Signing in…",
+    "invalid": "Email or password is incorrect"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "pos": "Point of Sale",
+    "products": "Products",
+    "inventory": "Inventory",
+    "sales": "Sales",
+    "customers": "Customers",
+    "reports": "Reports",
+    "users": "Users",
+    "tenants": "Shops",
+    "plans": "Plans",
+    "platform": "Platform"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "todaySales": "Today's sales",
+    "todayCount": "Transactions today",
+    "stockValue": "Stock value",
+    "monthlyProfit": "Monthly profit"
+  },
+  "connection": {
+    "online": "Online",
+    "offline": "Offline",
+    "syncing": "Syncing ({{count}})"
+  },
+  "subscription": {
+    "expired": "Your subscription is inactive. Please contact your administrator.",
+    "pastDue": "Your subscription is past due.",
+    "trialExpiring": "Your trial expires in {{days}} day(s)."
+  }
+}

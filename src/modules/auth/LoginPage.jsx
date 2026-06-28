@@ -57,7 +57,7 @@ export const LoginPage = () => {
             />
           </label>
           {error && <p className="error">{error}</p>}
-          <button type="submit" disabled={busy}>
+          <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={busy}>
             {busy ? t('auth.signingIn') : t('auth.submit')}
           </button>
         </form>

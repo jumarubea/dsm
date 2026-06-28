@@ -37,7 +37,7 @@ export const SuperAdminLayout = () => {
           <span className="spacer" />
           <LanguageToggle />
           <span className="user">{user?.name}</span>
-          <button type="button" onClick={onLogout}>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={onLogout}>
             {t('common.logout')}
           </button>
         </header>

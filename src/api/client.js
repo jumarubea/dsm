@@ -18,7 +18,11 @@ const WRITE_METHODS = ['post', 'put', 'patch', 'delete'];
 api.interceptors.request.use((config) => {
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   const method = (config.method || 'get').toLowerCase();
-  if (WRITE_METHODS.includes(method) && !config.skipIdempotency && !config.headers['Idempotency-Key']) {
+  if (
+    WRITE_METHODS.includes(method) &&
+    !config.skipIdempotency &&
+    !config.headers['Idempotency-Key']
+  ) {
     config.headers['Idempotency-Key'] = generateIdempotencyKey();
   }
   return config;
@@ -36,8 +40,7 @@ api.interceptors.response.use(
     if (response.status === 401 && !config._retried && !config.url?.includes('/auth/')) {
       config._retried = true;
       try {
-        refreshing =
-          refreshing || api.post('/api/v1/auth/refresh', {}, { skipIdempotency: true });
+        refreshing = refreshing || api.post('/api/v1/auth/refresh', {}, { skipIdempotency: true });
         const res = await refreshing;
         refreshing = null;
         const token = res.data?.data?.accessToken;

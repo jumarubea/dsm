@@ -4,7 +4,10 @@ import { listProducts } from '../../api/products.js';
 import { createSale } from '../../api/sales.js';
 import { apiMessage } from '../../api/error.js';
 import { formatTZS } from '../../utils/formatTZS.js';
+import { generateIdempotencyKey } from '../../utils/idempotencyKey.js';
+import { enqueueWrite } from '../../offline/queue.js';
 import { cartTotal, lineTotal } from './cart.js';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 import { useToast } from '../../contexts/ToastContext.jsx';
 import { Loading } from '../../components/common/Spinner.jsx';
 import { EmptyState } from '../../components/common/EmptyState.jsx';
@@ -14,6 +17,7 @@ const METHODS = ['cash', 'mpesa', 'airtel'];
 
 export const PosPage = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const toast = useToast();
   const [products, setProducts] = useState(null);
   const [search, setSearch] = useState('');
@@ -91,19 +95,43 @@ export const PosPage = () => {
   const charge = async () => {
     if (!cart.length) return;
     setBusy(true);
+    const key = generateIdempotencyKey();
+    const body = {
+      payment_method: method,
+      items: cart.map((i) => ({ product_id: i.id, quantity: i.quantity })),
+    };
+    if (reference.trim()) body.payment_reference = reference.trim();
+
+    // Queue the sale (same idempotency key) to sync when back online.
+    const queueForLater = async () => {
+      await enqueueWrite({
+        id: key,
+        endpoint: '/api/v1/sales',
+        method: 'post',
+        body,
+        tenant_id: user?.tenant_id,
+      });
+      reset();
+      refresh().catch(() => {});
+      toast(t('pos.savedOffline'), 'ok');
+    };
+
     try {
-      const body = {
-        payment_method: method,
-        items: cart.map((i) => ({ product_id: i.id, quantity: i.quantity })),
-      };
-      if (reference.trim()) body.payment_reference = reference.trim();
-      const { data } = await createSale(body);
+      if (!navigator.onLine) {
+        await queueForLater();
+        return;
+      }
+      const { data } = await createSale(body, key);
       setReceipt(data.data);
       reset();
       refresh().catch(() => {});
       toast(t('pos.completed'), 'ok');
     } catch (e) {
-      toast(apiMessage(e), 'err');
+      if (!e.response) {
+        await queueForLater(); // network error → offline
+      } else {
+        toast(apiMessage(e), 'err');
+      }
     } finally {
       setBusy(false);
     }

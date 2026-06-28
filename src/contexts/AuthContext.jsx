@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 import { setAccessToken } from '../api/client.js';
 import { loginRequest, refreshRequest, logoutRequest, setLanguageRequest } from '../api/auth.js';
 import { decodeJwt } from '../utils/jwt.js';
+import { syncQueue } from '../offline/sync.js';
 import i18n from '../i18n.js';
 
 const AuthContext = createContext(null);
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(data.data.accessToken);
     setUser(data.data.user);
     applyLanguage(data.data.user);
+    syncQueue().catch(() => {}); // flush anything queued while signed out / offline
     return data.data.user;
   }, []);
 

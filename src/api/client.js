@@ -8,8 +8,10 @@ export const setAccessToken = (token) => {
 };
 export const getAccessToken = () => accessToken;
 
+// `??` (not `||`) so an explicit empty VITE_API_URL means "same origin" — each
+// tenant subdomain then calls its own host, which the backend resolves to a tenant.
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000',
   withCredentials: true, // send/receive the HttpOnly refresh cookie
 });
 

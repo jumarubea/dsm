@@ -12,8 +12,6 @@ spec:
       labels:
         app: dsm-web
     spec:
-      imagePullSecrets:
-        - name: ghcr
       containers:
         - name: web
           image: ghcr.io/jumarubea/dsm-web:latest

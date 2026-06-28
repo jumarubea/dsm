@@ -12,6 +12,11 @@ import { PosPage } from '../modules/pos/PosPage.jsx';
 import { InventoryPage } from '../modules/inventory/InventoryPage.jsx';
 import { SalesPage } from '../modules/sales/SalesPage.jsx';
 import { CustomersPage } from '../modules/customers/CustomersPage.jsx';
+import { ReportsPage } from '../modules/reports/ReportsPage.jsx';
+import { PlatformDashboardPage } from '../modules/admin/PlatformDashboardPage.jsx';
+import { TenantsPage } from '../modules/admin/TenantsPage.jsx';
+import { PlansPage } from '../modules/admin/PlansPage.jsx';
+import { RoleGuard } from '../components/RoleGuard.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Shell = () => {
@@ -21,8 +26,10 @@ const Shell = () => {
 
 const Home = () => {
   const { user } = useAuth();
-  return user?.role === 'super_admin' ? <Placeholder titleKey="platform" /> : <DashboardPage />;
+  return user?.role === 'super_admin' ? <PlatformDashboardPage /> : <DashboardPage />;
 };
+
+const adminOnly = (el) => <RoleGuard roles={['super_admin']}>{el}</RoleGuard>;
 
 const SubscriptionExpired = () => {
   const { t } = useTranslation();
@@ -58,10 +65,10 @@ export const AppRouter = () => (
           <Route path="inventory" element={<InventoryPage />} />
           <Route path="sales" element={<SalesPage />} />
           <Route path="customers" element={<CustomersPage />} />
-          <Route path="reports" element={<Placeholder titleKey="reports" />} />
+          <Route path="reports" element={<ReportsPage />} />
           <Route path="users" element={<Placeholder titleKey="users" />} />
-          <Route path="tenants" element={<Placeholder titleKey="tenants" />} />
-          <Route path="plans" element={<Placeholder titleKey="plans" />} />
+          <Route path="tenants" element={adminOnly(<TenantsPage />)} />
+          <Route path="plans" element={adminOnly(<PlansPage />)} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Route>

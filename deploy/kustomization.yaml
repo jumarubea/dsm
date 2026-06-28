@@ -5,4 +5,4 @@ resources:
   - frontend.yaml
 images:
   - name: ghcr.io/jumarubea/dsm-web
-    newTag: latest
+    newTag: sha-59e7c851ae5b5dcbcee5894e6227d2e6ba087b0d

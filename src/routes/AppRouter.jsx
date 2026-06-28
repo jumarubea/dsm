@@ -9,6 +9,9 @@ import { LoginPage } from '../modules/auth/LoginPage.jsx';
 import { DashboardPage } from '../modules/dashboard/DashboardPage.jsx';
 import { ProductsPage } from '../modules/products/ProductsPage.jsx';
 import { PosPage } from '../modules/pos/PosPage.jsx';
+import { InventoryPage } from '../modules/inventory/InventoryPage.jsx';
+import { SalesPage } from '../modules/sales/SalesPage.jsx';
+import { CustomersPage } from '../modules/customers/CustomersPage.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Shell = () => {
@@ -52,9 +55,9 @@ export const AppRouter = () => (
           <Route index element={<Home />} />
           <Route path="pos" element={<PosPage />} />
           <Route path="products" element={<ProductsPage />} />
-          <Route path="inventory" element={<Placeholder titleKey="inventory" />} />
-          <Route path="sales" element={<Placeholder titleKey="sales" />} />
-          <Route path="customers" element={<Placeholder titleKey="customers" />} />
+          <Route path="inventory" element={<InventoryPage />} />
+          <Route path="sales" element={<SalesPage />} />
+          <Route path="customers" element={<CustomersPage />} />
           <Route path="reports" element={<Placeholder titleKey="reports" />} />
           <Route path="users" element={<Placeholder titleKey="users" />} />
           <Route path="tenants" element={<Placeholder titleKey="tenants" />} />

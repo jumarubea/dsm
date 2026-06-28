@@ -626,8 +626,7 @@ table.tbl {
   display: grid;
   grid-template-columns: 1fr 380px;
   gap: 1.1rem;
-  height: calc(100vh - 57px);
-  padding: 1.1rem 1.25rem;
+  align-items: start;
 }
 .pos-left {
   display: flex;
@@ -642,6 +641,7 @@ table.tbl {
   overflow: auto;
   padding-right: 0.25rem;
   align-content: start;
+  max-height: calc(100vh - 215px);
 }
 .tile {
   text-align: left;
@@ -696,6 +696,9 @@ table.tbl {
   flex-direction: column;
   box-shadow: var(--shadow-sm);
   min-height: 0;
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 110px);
 }
 .cart-head {
   padding: 0.9rem 1.1rem;

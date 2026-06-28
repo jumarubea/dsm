@@ -8,6 +8,7 @@ import { Placeholder } from '../components/common/Placeholder.jsx';
 import { LoginPage } from '../modules/auth/LoginPage.jsx';
 import { DashboardPage } from '../modules/dashboard/DashboardPage.jsx';
 import { ProductsPage } from '../modules/products/ProductsPage.jsx';
+import { PosPage } from '../modules/pos/PosPage.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Shell = () => {
@@ -49,7 +50,7 @@ export const AppRouter = () => (
       <Route element={<ProtectedRoute />}>
         <Route element={<Shell />}>
           <Route index element={<Home />} />
-          <Route path="pos" element={<Placeholder titleKey="pos" />} />
+          <Route path="pos" element={<PosPage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="inventory" element={<Placeholder titleKey="inventory" />} />
           <Route path="sales" element={<Placeholder titleKey="sales" />} />

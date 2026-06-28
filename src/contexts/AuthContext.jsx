@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { setAccessToken } from '../api/client.js';
 import { loginRequest, refreshRequest, logoutRequest, setLanguageRequest } from '../api/auth.js';
+import { decodeJwt } from '../utils/jwt.js';
 import i18n from '../i18n.js';
 
 const AuthContext = createContext(null);
@@ -57,7 +58,32 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const value = { user, loading, login, logout, updateLanguage, isAuthenticated: !!user };
+  // Super Admin "open shop": swap to the impersonation token and adopt the
+  // tenant shop_admin identity decoded from it.
+  const startImpersonation = useCallback((token) => {
+    const claims = decodeJwt(token);
+    if (!claims) return;
+    setAccessToken(token);
+    setUser({
+      id: claims.sub,
+      role: claims.role,
+      tenant_id: claims.tenant_id,
+      tenant_slug: claims.tenant_slug,
+      name: `Shop: ${claims.tenant_slug}`,
+      language_preference: i18n.language,
+      impersonating: true,
+    });
+  }, []);
+
+  const value = {
+    user,
+    loading,
+    login,
+    logout,
+    updateLanguage,
+    startImpersonation,
+    isAuthenticated: !!user,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

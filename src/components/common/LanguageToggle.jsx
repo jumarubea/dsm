@@ -7,7 +7,12 @@ export const LanguageToggle = () => {
   const next = i18n.language === 'en' ? 'sw' : 'en';
   const toggle = () => (isAuthenticated ? updateLanguage(next) : i18n.changeLanguage(next));
   return (
-    <button type="button" className="lang-toggle" onClick={toggle} aria-label="Switch language">
+    <button
+      type="button"
+      className="btn btn-ghost btn-sm lang-toggle"
+      onClick={toggle}
+      aria-label="Switch language"
+    >
       {next.toUpperCase()}
     </button>
   );

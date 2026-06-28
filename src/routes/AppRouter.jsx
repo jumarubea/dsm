@@ -7,6 +7,7 @@ import { SuperAdminLayout } from '../components/layout/SuperAdminLayout.jsx';
 import { Placeholder } from '../components/common/Placeholder.jsx';
 import { LoginPage } from '../modules/auth/LoginPage.jsx';
 import { DashboardPage } from '../modules/dashboard/DashboardPage.jsx';
+import { ProductsPage } from '../modules/products/ProductsPage.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Shell = () => {
@@ -49,7 +50,7 @@ export const AppRouter = () => (
         <Route element={<Shell />}>
           <Route index element={<Home />} />
           <Route path="pos" element={<Placeholder titleKey="pos" />} />
-          <Route path="products" element={<Placeholder titleKey="products" />} />
+          <Route path="products" element={<ProductsPage />} />
           <Route path="inventory" element={<Placeholder titleKey="inventory" />} />
           <Route path="sales" element={<Placeholder titleKey="sales" />} />
           <Route path="customers" element={<Placeholder titleKey="customers" />} />

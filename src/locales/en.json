@@ -90,7 +90,31 @@
     "newSale": "New sale",
     "noStock": "Out of stock",
     "receipt": "Receipt",
-    "noProducts": "No products available. Add products first."
+    "noProducts": "No products available. Add products first.",
+    "savedOffline": "Saved offline — it will sync when you're back online"
+  },
+  "users": {
+    "title": "Users",
+    "new": "New user",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "deactivate": "Deactivate",
+    "deactivateConfirm": "Deactivate this user?",
+    "none": "No users yet",
+    "saved": "User saved",
+    "deactivated": "User deactivated",
+    "role_shop_admin": "Shop Admin",
+    "role_manager": "Manager",
+    "role_sales_attendant": "Sales Attendant",
+    "role_store_keeper": "Store Keeper"
+  },
+  "sync": {
+    "failed": "A queued sale could not be synced and was removed"
   },
   "inventory": {
     "title": "Inventory",

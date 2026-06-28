@@ -90,7 +90,31 @@
     "newSale": "Mauzo mapya",
     "noStock": "Hisa imeisha",
     "receipt": "Risiti",
-    "noProducts": "Hakuna bidhaa. Ongeza bidhaa kwanza."
+    "noProducts": "Hakuna bidhaa. Ongeza bidhaa kwanza.",
+    "savedOffline": "Imehifadhiwa nje ya mtandao — itasawazishwa ukirudi mtandaoni"
+  },
+  "users": {
+    "title": "Watumiaji",
+    "new": "Mtumiaji mpya",
+    "name": "Jina",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "role": "Wadhifa",
+    "status": "Hali",
+    "active": "Yupo hai",
+    "inactive": "Hayupo hai",
+    "deactivate": "Zima",
+    "deactivateConfirm": "Zima mtumiaji huyu?",
+    "none": "Hakuna watumiaji bado",
+    "saved": "Mtumiaji amehifadhiwa",
+    "deactivated": "Mtumiaji amezimwa",
+    "role_shop_admin": "Msimamizi wa Duka",
+    "role_manager": "Meneja",
+    "role_sales_attendant": "Muuzaji",
+    "role_store_keeper": "Mhifadhi wa Bidhaa"
+  },
+  "sync": {
+    "failed": "Mauzo yaliyopangwa hayakuweza kusawazishwa na yameondolewa"
   },
   "inventory": {
     "title": "Hisa",

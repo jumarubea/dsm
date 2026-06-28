@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getQueueCount } from '../offline/queue.js';
 
 const OfflineContext = createContext({ isOnline: true, queueCount: 0 });
 
@@ -15,6 +16,7 @@ export const OfflineProvider = ({ children }) => {
     window.addEventListener('online', goOnline);
     window.addEventListener('offline', goOffline);
     window.addEventListener('dsm:queue-changed', onQueue);
+    getQueueCount().catch(() => {});
     return () => {
       window.removeEventListener('online', goOnline);
       window.removeEventListener('offline', goOffline);

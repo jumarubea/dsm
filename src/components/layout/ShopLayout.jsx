@@ -12,7 +12,7 @@ const SHOP_NAV = [
   { to: '/sales', key: 'sales' },
   { to: '/customers', key: 'customers' },
   { to: '/reports', key: 'reports' },
-  { to: '/users', key: 'users' },
+  { to: '/users', key: 'users', roles: ['shop_admin'] },
 ];
 
 export const ShopLayout = () => {
@@ -29,7 +29,7 @@ export const ShopLayout = () => {
       <aside className="sidebar">
         <div className="brand">{t('common.appName')}</div>
         <nav>
-          {SHOP_NAV.map((i) => (
+          {SHOP_NAV.filter((i) => !i.roles || i.roles.includes(user?.role)).map((i) => (
             <NavLink key={i.key} to={i.to} end={i.end}>
               {t(`nav.${i.key}`)}
             </NavLink>

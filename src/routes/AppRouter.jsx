@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { ProtectedRoute } from '../components/ProtectedRoute.jsx';
 import { ShopLayout } from '../components/layout/ShopLayout.jsx';
 import { SuperAdminLayout } from '../components/layout/SuperAdminLayout.jsx';
-import { Placeholder } from '../components/common/Placeholder.jsx';
 import { LoginPage } from '../modules/auth/LoginPage.jsx';
 import { DashboardPage } from '../modules/dashboard/DashboardPage.jsx';
 import { ProductsPage } from '../modules/products/ProductsPage.jsx';
@@ -16,8 +15,10 @@ import { ReportsPage } from '../modules/reports/ReportsPage.jsx';
 import { PlatformDashboardPage } from '../modules/admin/PlatformDashboardPage.jsx';
 import { TenantsPage } from '../modules/admin/TenantsPage.jsx';
 import { PlansPage } from '../modules/admin/PlansPage.jsx';
+import { UsersPage } from '../modules/users/UsersPage.jsx';
 import { RoleGuard } from '../components/RoleGuard.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { useToast } from '../contexts/ToastContext.jsx';
 
 const Shell = () => {
   const { user } = useAuth();
@@ -51,9 +52,22 @@ const SubscriptionWatcher = () => {
   return null;
 };
 
+// Surfaces a toast when a queued offline sale cannot be synced.
+const SyncNotifier = () => {
+  const toast = useToast();
+  const { t } = useTranslation();
+  useEffect(() => {
+    const handler = () => toast(t('sync.failed'), 'err');
+    window.addEventListener('dsm:sync-failed', handler);
+    return () => window.removeEventListener('dsm:sync-failed', handler);
+  }, [toast, t]);
+  return null;
+};
+
 export const AppRouter = () => (
   <BrowserRouter>
     <SubscriptionWatcher />
+    <SyncNotifier />
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/subscription-expired" element={<SubscriptionExpired />} />
@@ -66,7 +80,10 @@ export const AppRouter = () => (
           <Route path="sales" element={<SalesPage />} />
           <Route path="customers" element={<CustomersPage />} />
           <Route path="reports" element={<ReportsPage />} />
-          <Route path="users" element={<Placeholder titleKey="users" />} />
+          <Route
+            path="users"
+            element={<RoleGuard roles={['shop_admin']}>{<UsersPage />}</RoleGuard>}
+          />
           <Route path="tenants" element={adminOnly(<TenantsPage />)} />
           <Route path="plans" element={adminOnly(<PlansPage />)} />
           <Route path="*" element={<Navigate to="/" replace />} />

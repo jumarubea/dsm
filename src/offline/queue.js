@@ -7,6 +7,9 @@ const emitCount = async () => {
   return count;
 };
 
+/** Current queue size (also broadcasts it). */
+export const getQueueCount = () => emitCount();
+
 /**
  * Queue a write for later sync. `item.id` MUST be the idempotency key so the
  * server dedupes a replay. `item.tenant_id` is included per the offline rules.

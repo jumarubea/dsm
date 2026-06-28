@@ -4,6 +4,7 @@ import './i18n.js';
 import './index.css';
 import App from './App.jsx';
 import { registerServiceWorker } from './offline/registerSW.js';
+import { initSync } from './offline/sync.js';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,3 +13,4 @@ createRoot(document.getElementById('root')).render(
 );
 
 registerServiceWorker();
+initSync();

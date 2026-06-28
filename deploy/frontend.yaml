@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dsm-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dsm-web
+  template:
+    metadata:
+      labels:
+        app: dsm-web
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: web
+          image: ghcr.io/jumarubea/dsm-web:latest
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 24Mi
+              cpu: 10m
+            limits:
+              memory: 96Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dsm-web
+spec:
+  selector:
+    app: dsm-web
+  ports:
+    - port: 80
+      targetPort: 80

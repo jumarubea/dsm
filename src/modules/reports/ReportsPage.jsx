@@ -16,6 +16,7 @@ import { useToast } from '../../contexts/ToastContext.jsx';
 import { Button } from '../../components/common/Button.jsx';
 import { Loading } from '../../components/common/Spinner.jsx';
 import { EmptyState } from '../../components/common/EmptyState.jsx';
+import { ExportButtons } from './ExportButtons.jsx';
 
 const today = () => new Date().toISOString().slice(0, 10);
 const thisMonth = () => new Date().toISOString().slice(0, 7);
@@ -59,6 +60,23 @@ const DailyReport = () => {
         >
           {t('reports.downloadCsv')}
         </Button>
+        <ExportButtons
+          disabled={!data}
+          build={() => ({
+            title: `${t('reports.daily')} — ${date}`,
+            meta: [
+              { label: t('reports.transactions'), value: data.count },
+              { label: t('reports.totalSales'), value: formatTZS(data.total) },
+            ],
+            columns: [
+              { header: t('reports.method'), key: 'payment_method' },
+              { header: t('reports.count'), key: 'count' },
+              { header: t('reports.totalSales'), key: 'total', money: true },
+            ],
+            rows: data.by_method ?? [],
+            filename: `daily-${date}`,
+          })}
+        />
       </div>
       {!data ? (
         <Loading />
@@ -94,6 +112,23 @@ const MonthlyReport = () => {
         >
           {t('reports.downloadCsv')}
         </Button>
+        <ExportButtons
+          disabled={!data}
+          build={() => ({
+            title: `${t('reports.monthly')} — ${month}`,
+            meta: [
+              { label: t('reports.transactions'), value: data.count },
+              { label: t('reports.totalSales'), value: formatTZS(data.total) },
+            ],
+            columns: [
+              { header: t('reports.method'), key: 'payment_method' },
+              { header: t('reports.count'), key: 'count' },
+              { header: t('reports.totalSales'), key: 'total', money: true },
+            ],
+            rows: data.by_method ?? [],
+            filename: `monthly-${month}`,
+          })}
+        />
       </div>
       {!data ? (
         <Loading />
@@ -161,6 +196,24 @@ const ProfitReport = () => {
           aria-label={t('reports.to')}
           style={{ maxWidth: 170 }}
         />
+        <span className="spacer" />
+        <ExportButtons
+          disabled={!data}
+          build={() => ({
+            title: t('reports.profit'),
+            meta: [
+              { label: t('reports.from'), value: range.from || '—' },
+              { label: t('reports.to'), value: range.to || '—' },
+            ],
+            columns: [
+              { header: t('reports.revenue'), key: 'revenue', money: true },
+              { header: t('reports.cost'), key: 'cost', money: true },
+              { header: t('reports.profitAmount'), key: 'profit', money: true },
+            ],
+            rows: data ? [data] : [],
+            filename: `profit-${range.from || 'all'}-${range.to || 'all'}`,
+          })}
+        />
       </div>
       {!data ? (
         <Loading />
@@ -189,6 +242,18 @@ const FastMovingReport = () => {
         >
           {t('reports.downloadCsv')}
         </Button>
+        <ExportButtons
+          disabled={!data}
+          build={() => ({
+            title: t('reports.fastMoving'),
+            columns: [
+              { header: t('reports.product'), key: 'name' },
+              { header: t('reports.unitsSold'), key: 'units_sold' },
+            ],
+            rows: data ?? [],
+            filename: 'fast-moving',
+          })}
+        />
       </div>
       {data.length === 0 ? (
         <EmptyState title={t('reports.noData')} />
@@ -230,6 +295,22 @@ const DeadStockReport = () => {
         >
           {t('reports.downloadCsv')}
         </Button>
+        <ExportButtons
+          disabled={!data}
+          build={() => ({
+            title: t('reports.deadStock'),
+            columns: [
+              { header: t('reports.product'), key: 'name' },
+              { header: t('reports.stock'), key: 'stock_qty' },
+              { header: t('reports.lastSold'), key: 'last_sold' },
+            ],
+            rows: (data ?? []).map((p) => ({
+              ...p,
+              last_sold: p.last_sold_at ? formatDate(p.last_sold_at) : t('reports.never'),
+            })),
+            filename: 'dead-stock',
+          })}
+        />
       </div>
       {data.length === 0 ? (
         <EmptyState title={t('reports.noData')} />

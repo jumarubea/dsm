@@ -240,7 +240,10 @@
     "deactivate": "Deactivate",
     "active": "Active",
     "inactive": "Inactive",
-    "none": "No shops yet"
+    "none": "No shops yet",
+    "impersonating": "Support mode — viewing {{shop}}",
+    "exitShop": "Exit shop",
+    "impersonationEnded": "Support session ended — back to platform"
   },
   "connection": {
     "online": "Online",

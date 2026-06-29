@@ -11,13 +11,72 @@ const applyLanguage = (user) => {
   if (user?.language_preference) i18n.changeLanguage(user.language_preference);
 };
 
+// Impersonation token is held in sessionStorage — per-tab, so it survives a
+// reload of the support tab without leaking into the super admin's other tabs,
+// and never collides with the shared (super admin) refresh cookie.
+const IMP_KEY = 'dsm_impersonation';
+const impStore = {
+  get() {
+    try {
+      return sessionStorage.getItem(IMP_KEY);
+    } catch {
+      return null;
+    }
+  },
+  set(token) {
+    try {
+      sessionStorage.setItem(IMP_KEY, token);
+    } catch {
+      /* storage unavailable (private mode / jsdom) — impersonation just won't survive reload */
+    }
+  },
+  clear() {
+    try {
+      sessionStorage.removeItem(IMP_KEY);
+    } catch {
+      /* ignore */
+    }
+  },
+};
+
+const userFromImpersonation = (claims) => ({
+  id: claims.sub,
+  role: claims.role,
+  tenant_id: claims.tenant_id,
+  tenant_slug: claims.tenant_slug,
+  name: `Shop: ${claims.tenant_slug}`,
+  language_preference: i18n.language,
+  impersonating: true,
+});
+
+// A stored impersonation token, only if present and not past its 2h expiry.
+const readValidImpersonation = () => {
+  const token = impStore.get();
+  if (!token) return null;
+  const claims = decodeJwt(token);
+  if (!claims || (claims.exp && claims.exp * 1000 <= Date.now())) {
+    impStore.clear();
+    return null;
+  }
+  return { token, claims };
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Restore the session from the refresh cookie on first load.
+  // On first load, an active impersonation (per-tab) wins over the refresh
+  // cookie — otherwise a reload of the support tab would silently revert the
+  // operator to their super admin identity and every shop page would break.
   useEffect(() => {
     (async () => {
+      const imp = readValidImpersonation();
+      if (imp) {
+        setAccessToken(imp.token);
+        setUser(userFromImpersonation(imp.claims));
+        setLoading(false);
+        return;
+      }
       try {
         const { data } = await refreshRequest();
         setAccessToken(data.data.accessToken);
@@ -32,6 +91,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = useCallback(async (email, password) => {
+    impStore.clear(); // a real login always supersedes any impersonation in this tab
     const { data } = await loginRequest(email, password);
     setAccessToken(data.data.accessToken);
     setUser(data.data.user);
@@ -41,6 +101,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = useCallback(async () => {
+    impStore.clear();
     try {
       await logoutRequest();
     } catch {
@@ -61,20 +122,32 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Super Admin "open shop": swap to the impersonation token and adopt the
-  // tenant shop_admin identity decoded from it.
+  // tenant shop_admin identity decoded from it. Persisted per-tab so it
+  // survives a reload of the support tab.
   const startImpersonation = useCallback((token) => {
     const claims = decodeJwt(token);
     if (!claims) return;
+    impStore.set(token);
     setAccessToken(token);
-    setUser({
-      id: claims.sub,
-      role: claims.role,
-      tenant_id: claims.tenant_id,
-      tenant_slug: claims.tenant_slug,
-      name: `Shop: ${claims.tenant_slug}`,
-      language_preference: i18n.language,
-      impersonating: true,
-    });
+    setUser(userFromImpersonation(claims));
+  }, []);
+
+  // "Exit shop": drop the impersonation token and restore the super admin
+  // identity from the (untouched) refresh cookie.
+  const stopImpersonation = useCallback(async () => {
+    impStore.clear();
+    setAccessToken(null);
+    setLoading(true);
+    try {
+      const { data } = await refreshRequest();
+      setAccessToken(data.data.accessToken);
+      setUser(data.data.user);
+      applyLanguage(data.data.user);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const value = {
@@ -84,6 +157,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateLanguage,
     startImpersonation,
+    stopImpersonation,
+    isImpersonating: !!user?.impersonating,
     isAuthenticated: !!user,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

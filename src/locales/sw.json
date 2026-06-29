@@ -240,7 +240,10 @@
     "deactivate": "Zima",
     "active": "Inafanya kazi",
     "inactive": "Haifanyi kazi",
-    "none": "Hakuna maduka bado"
+    "none": "Hakuna maduka bado",
+    "impersonating": "Hali ya msaada — unaangalia {{shop}}",
+    "exitShop": "Toka dukani",
+    "impersonationEnded": "Kipindi cha msaada kimekwisha — rudi kwenye mfumo"
   },
   "connection": {
     "online": "Mtandaoni",

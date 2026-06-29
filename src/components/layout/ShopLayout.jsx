@@ -17,11 +17,15 @@ const SHOP_NAV = [
 
 export const ShopLayout = () => {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout, isImpersonating, stopImpersonation } = useAuth();
   const navigate = useNavigate();
   const onLogout = async () => {
     await logout();
     navigate('/login');
+  };
+  const onExitShop = async () => {
+    await stopImpersonation();
+    navigate('/'); // back to the super admin platform dashboard
   };
 
   return (
@@ -37,14 +41,24 @@ export const ShopLayout = () => {
         </nav>
       </aside>
       <div className="main">
+        {isImpersonating && (
+          <div className="impersonation-bar" role="status">
+            <span>{t('admin.impersonating', { shop: user?.tenant_slug })}</span>
+            <button type="button" className="btn btn-sm" onClick={onExitShop}>
+              {t('admin.exitShop')}
+            </button>
+          </div>
+        )}
         <header className="topbar">
           <ConnectionStatus />
           <span className="spacer" />
           <LanguageToggle />
           <span className="user">{user?.name}</span>
-          <button type="button" className="btn btn-ghost btn-sm" onClick={onLogout}>
-            {t('common.logout')}
-          </button>
+          {!isImpersonating && (
+            <button type="button" className="btn btn-ghost btn-sm" onClick={onLogout}>
+              {t('common.logout')}
+            </button>
+          )}
         </header>
         <main className="content">
           <Outlet />

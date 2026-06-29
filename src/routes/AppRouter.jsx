@@ -64,10 +64,30 @@ const SyncNotifier = () => {
   return null;
 };
 
+// When an impersonation (support) session lapses, drop back to super admin
+// rather than silently adopting the cookie identity.
+const ImpersonationWatcher = () => {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { t } = useTranslation();
+  const { stopImpersonation } = useAuth();
+  useEffect(() => {
+    const handler = async () => {
+      await stopImpersonation();
+      toast(t('admin.impersonationEnded'), 'err');
+      navigate('/');
+    };
+    window.addEventListener('dsm:impersonation-expired', handler);
+    return () => window.removeEventListener('dsm:impersonation-expired', handler);
+  }, [navigate, toast, t, stopImpersonation]);
+  return null;
+};
+
 export const AppRouter = () => (
   <BrowserRouter>
     <SubscriptionWatcher />
     <SyncNotifier />
+    <ImpersonationWatcher />
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/subscription-expired" element={<SubscriptionExpired />} />

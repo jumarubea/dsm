@@ -17,6 +17,15 @@ export const api = axios.create({
 
 const WRITE_METHODS = ['post', 'put', 'patch', 'delete'];
 
+// True when this tab holds an impersonation (support) token.
+const isImpersonating = () => {
+  try {
+    return !!sessionStorage.getItem('dsm_impersonation');
+  } catch {
+    return false;
+  }
+};
+
 api.interceptors.request.use((config) => {
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   const method = (config.method || 'get').toLowerCase();
@@ -40,6 +49,13 @@ api.interceptors.response.use(
 
     // One refresh attempt on 401, then retry the original request.
     if (response.status === 401 && !config._retried && !config.url?.includes('/auth/')) {
+      // While impersonating, the refresh cookie belongs to the super admin, so
+      // refreshing here would silently swap identities. Exit impersonation
+      // cleanly instead (the 2h support token has lapsed).
+      if (isImpersonating()) {
+        window.dispatchEvent(new CustomEvent('dsm:impersonation-expired'));
+        return Promise.reject(error);
+      }
       config._retried = true;
       try {
         refreshing = refreshing || api.post('/api/v1/auth/refresh', {}, { skipIdempotency: true });

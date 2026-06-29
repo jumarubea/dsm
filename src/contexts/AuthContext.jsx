@@ -1,6 +1,12 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { setAccessToken } from '../api/client.js';
-import { loginRequest, refreshRequest, logoutRequest, setLanguageRequest } from '../api/auth.js';
+import {
+  loginRequest,
+  registerRequest,
+  refreshRequest,
+  logoutRequest,
+  setLanguageRequest,
+} from '../api/auth.js';
 import { decodeJwt } from '../utils/jwt.js';
 import { syncQueue } from '../offline/sync.js';
 import i18n from '../i18n.js';
@@ -100,6 +106,17 @@ export const AuthProvider = ({ children }) => {
     return data.data.user;
   }, []);
 
+  // Self-registration signs the new owner in immediately (same token + cookie
+  // shape as login).
+  const register = useCallback(async (body) => {
+    impStore.clear();
+    const { data } = await registerRequest(body);
+    setAccessToken(data.data.accessToken);
+    setUser(data.data.user);
+    applyLanguage(data.data.user);
+    return data.data.user;
+  }, []);
+
   const logout = useCallback(async () => {
     impStore.clear();
     try {
@@ -154,6 +171,7 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
+    register,
     logout,
     updateLanguage,
     startImpersonation,

@@ -22,7 +22,25 @@
     "password": "Password",
     "submit": "Sign in",
     "signingIn": "Signing in…",
-    "invalid": "Email or password is incorrect"
+    "invalid": "Email or password is incorrect",
+    "noAccount": "New here?",
+    "registerLink": "Create a shop"
+  },
+  "register": {
+    "title": "Create your shop",
+    "lead": "Start your free trial — no card needed.",
+    "shopName": "Shop name",
+    "ownerName": "Your name",
+    "passwordHint": "At least 8 characters",
+    "choosePlan": "Choose a plan",
+    "month": "mo",
+    "seats": "{{n}} users",
+    "trialDays": "{{n}}-day trial",
+    "unlimited": "Unlimited",
+    "submit": "Create shop & start trial",
+    "creating": "Creating your shop…",
+    "haveAccount": "Already have a shop?",
+    "signInLink": "Sign in"
   },
   "nav": {
     "dashboard": "Dashboard",

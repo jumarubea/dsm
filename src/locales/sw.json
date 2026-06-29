@@ -22,7 +22,25 @@
     "password": "Nenosiri",
     "submit": "Ingia",
     "signingIn": "Inaingia…",
-    "invalid": "Barua pepe au nenosiri si sahihi"
+    "invalid": "Barua pepe au nenosiri si sahihi",
+    "noAccount": "Mgeni hapa?",
+    "registerLink": "Fungua duka"
+  },
+  "register": {
+    "title": "Fungua duka lako",
+    "lead": "Anza majaribio bure — bila kadi.",
+    "shopName": "Jina la duka",
+    "ownerName": "Jina lako",
+    "passwordHint": "Angalau herufi 8",
+    "choosePlan": "Chagua mpango",
+    "month": "mwe",
+    "seats": "watumiaji {{n}}",
+    "trialDays": "majaribio siku {{n}}",
+    "unlimited": "Bila kikomo",
+    "submit": "Fungua duka & anza majaribio",
+    "creating": "Inafungua duka lako…",
+    "haveAccount": "Una duka tayari?",
+    "signInLink": "Ingia"
   },
   "nav": {
     "dashboard": "Dashibodi",

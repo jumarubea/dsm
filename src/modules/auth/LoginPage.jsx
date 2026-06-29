@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { LanguageToggle } from '../../components/common/LanguageToggle.jsx';
@@ -61,6 +61,9 @@ export const LoginPage = () => {
             {busy ? t('auth.signingIn') : t('auth.submit')}
           </button>
         </form>
+        <p className="login-alt">
+          {t('auth.noAccount')} <Link to="/register">{t('auth.registerLink')}</Link>
+        </p>
       </div>
     </div>
   );

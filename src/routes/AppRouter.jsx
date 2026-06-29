@@ -5,6 +5,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute.jsx';
 import { ShopLayout } from '../components/layout/ShopLayout.jsx';
 import { SuperAdminLayout } from '../components/layout/SuperAdminLayout.jsx';
 import { LoginPage } from '../modules/auth/LoginPage.jsx';
+import { RegisterPage } from '../modules/auth/RegisterPage.jsx';
 import { DashboardPage } from '../modules/dashboard/DashboardPage.jsx';
 import { ProductsPage } from '../modules/products/ProductsPage.jsx';
 import { PosPage } from '../modules/pos/PosPage.jsx';
@@ -90,6 +91,7 @@ export const AppRouter = () => (
     <ImpersonationWatcher />
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="/subscription-expired" element={<SubscriptionExpired />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Shell />}>
